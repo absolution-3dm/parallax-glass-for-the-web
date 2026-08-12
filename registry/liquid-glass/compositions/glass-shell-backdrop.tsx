@@ -13,6 +13,7 @@ import {
   generateAxisLensMaps,
   writeSpecularOverlay,
 } from "../refraction/lens-map";
+import { refrPowFromCurvature } from "../refraction/math";
 import {
   backdropFilterPadding,
   buildLensMapParams,
@@ -552,7 +553,8 @@ export function GlassShellBackdrop({
     ].join(":");
 
     const strength = Math.max(0, m.scale);
-    const backdropPx = refractionBackdropScale(strength, liveW, liveH);
+    const refrPow = refrPowFromCurvature(safeCurvature);
+    const backdropPx = refractionBackdropScale(strength, liveW, liveH, refrPow);
     const backdropScales = chromaticChannelScales(backdropPx, m.chroma);
     const liveRadius = Math.min(radiusIn, liveW / 2, liveH / 2);
 
@@ -863,7 +865,12 @@ export function GlassShellBackdrop({
     const liveW = Math.max(1, width);
     const liveH = Math.max(1, height);
     const m = materialRef.current;
-    const backdropPx = refractionBackdropScale(Math.max(0, m.scale), liveW, liveH);
+    const backdropPx = refractionBackdropScale(
+      Math.max(0, m.scale),
+      liveW,
+      liveH,
+      refrPowFromCurvature(m.curvature),
+    );
     const backdropScales = chromaticChannelScales(backdropPx, m.chroma);
     return {
       ...lens,
@@ -1202,7 +1209,12 @@ export function GlassShellBackdrop({
   const seedH = 48;
   const seedBlur = Math.max(0, blur ?? 0);
   const seedPad = backdropFilterPadding(seedBlur);
-  const seedPx = refractionBackdropScale(Math.max(0, scale), seedW, seedH);
+  const seedPx = refractionBackdropScale(
+    Math.max(0, scale),
+    seedW,
+    seedH,
+    refrPowFromCurvature(curvature),
+  );
   const seedScales = chromaticChannelScales(seedPx, chroma);
   const specularK = specularCompositeCoefficients(Math.max(0, specular));
   // Mount lens-filter SVG even on the CSS-blur path (Safari) so Chromium-style

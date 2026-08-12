@@ -159,6 +159,22 @@ Each chromatic refraction branch (red, green, and blue) must retain both
 opposite-order axis branches and use its channel's full scale consistently
 across all four displacement primitives.
 
+## 8-bit displacement range normalization
+
+`feDisplacementMap` reads an 8-bit PNG channel, so one pass can represent only
+256 displacement values. The optical field's peak includes the Snell factor
+`refrPow = 1 - 1/ior` (at most `0.6` for the current curvature mapping); writing
+that value directly into R/G wastes the rest of the channel range and makes
+large-surface quantization bands wider than necessary.
+
+The encoder therefore divides `refrPow` out of R/G only, and
+`refractionBackdropScale` requires the same factor and multiplies it back into
+every SVG displacement scale. Their product—and therefore the intended optical
+displacement—stays unchanged, while the channel code step shrinks by
+`refrPow`. Do not normalize the shared optical magnitude used by B/specular,
+and do not make the scale parameter optional: changing only one side changes
+the material's refraction strength.
+
 ## Cost of one backdrop evaluation
 
 Chromium re-evaluates a `backdrop-filter: url(...)` graph whenever the content

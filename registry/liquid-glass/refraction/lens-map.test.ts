@@ -30,11 +30,28 @@ const baseParams: LensMapParams = {
 
 describe("aspect-correct lens maps", () => {
   it("keeps refraction thickness invariant across aspect ratios", () => {
-    const circle = refractionBackdropScale(1.1, 48, 48);
+    const refrPow = 0.5;
+    const circle = refractionBackdropScale(1.1, 48, 48, refrPow);
 
-    expect(circle).toBeCloseTo(52.8);
-    expect(refractionBackdropScale(1.1, 160, 48)).toBeCloseTo(circle);
-    expect(refractionBackdropScale(1.1, 48, 160)).toBeCloseTo(circle);
+    expect(circle).toBeCloseTo(26.4);
+    expect(refractionBackdropScale(1.1, 160, 48, refrPow)).toBeCloseTo(circle);
+    expect(refractionBackdropScale(1.1, 48, 160, refrPow)).toBeCloseTo(circle);
+  });
+
+  it("uses the full displacement range while preserving curvature in SVG scale", () => {
+    const lower = { ...baseParams, refrPow: 0.3 };
+    const higher = { ...baseParams, refrPow: 0.6 };
+    const lowerMap = computeLensMap(lower);
+    const higherMap = computeLensMap(higher);
+
+    // The Snell factor is normalized out of R/G encoding, so both materials
+    // get the same 8-bit precision. It is multiplied back into filter scale.
+    for (let i = 0; i < lowerMap.data.length; i += 4) {
+      expect(lowerMap.data[i]).toBe(higherMap.data[i]);
+      expect(lowerMap.data[i + 1]).toBe(higherMap.data[i + 1]);
+    }
+    expect(refractionBackdropScale(1, 100, 80, 0.3)).toBe(24);
+    expect(refractionBackdropScale(1, 100, 80, 0.6)).toBe(48);
   });
 
   it("uses the element dimensions when the long edge exceeds the quality floor", () => {

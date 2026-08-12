@@ -172,6 +172,12 @@ export function computeLensMap(
   // Defence in depth: callers should already clamp via buildLensMapParams.
   const zR = clampBevelDepth(p.depth, hw, hh);
   const refrPow = Math.max(0, p.refrPow);
+  // R/G should use the full 8-bit displacement range. `refrPow` is the
+  // theoretical peak of the optical field (slope/slopeRef and each direction
+  // component are both <= 1), so divide it out here and multiply it back into
+  // the SVG scale. This preserves the physical displacement while reducing
+  // each encoded displacement step by `refrPow`.
+  const displacementEncodeNorm = refrPow > 0 ? 1 / refrPow : 1;
   // Normalize so peak rim slope maps near full channel range; feDisplacementMap
   // `scale` then supplies pixel strength (ybouane multiplies by ~refract·30).
   const slopeRef = zR > 0 ? Math.max(bevelSlope(1, zR), 1e-3) : 1;
@@ -267,10 +273,11 @@ export function computeLensMap(
       // Ybouane: slope of circular bevel; 0 outside and on the flat plateau.
       const inside = sdf < 0 ? -sdf : 0;
       const slope = sdf < 0 ? bevelSlope(inside, zR) : 0;
-      const mag = softKnee((slope * refrPow) / slopeRef, 1) * coverage;
+      const opticalMag = softKnee((slope * refrPow) / slopeRef, 1) * coverage;
+      const displacementMag = opticalMag * displacementEncodeNorm;
 
-      const hx = 0.5 * direction.nx * mag;
-      const hy = 0.5 * direction.ny * mag;
+      const hx = 0.5 * direction.nx * displacementMag;
+      const hy = 0.5 * direction.ny * displacementMag;
       const rPlus = ((0.5 + hx) * 255 + 0.5) | 0;
       const rMinus = ((0.5 - hx) * 255 + 0.5) | 0;
       const gPlus = ((0.5 + hy) * 255 + 0.5) | 0;
@@ -291,7 +298,9 @@ export function computeLensMap(
       let bBR = 128;
       if (hasSpecular) {
         // Stronger where the bevel actually bends (slope-weighted).
-        const m = mag > 0 ? Math.min(1, mag) : 0;
+        // Keep specular/Fresnel on the original optical magnitude. Only the
+        // displacement channels are range-normalized.
+        const m = opticalMag > 0 ? Math.min(1, opticalMag) : 0;
 
         if (m > 0.001 || inside < fresRangePx || inside < p.edgeWidth) {
           // Fresnel rim — omnidirectional, hue-agnostic brightening that hugs

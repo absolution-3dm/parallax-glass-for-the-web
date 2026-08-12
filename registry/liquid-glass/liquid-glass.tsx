@@ -324,7 +324,7 @@ export const LiquidGlass = ({
 
     const strength = Math.max(0, scale);
     // Backdrop filter uses userSpaceOnUse — scale is real CSS pixels.
-    const backdropPx = refractionBackdropScale(strength, w, h);
+    const backdropPx = refractionBackdropScale(strength, w, h, lensParams.refrPow);
     const blurPx = Math.max(0, blur);
     const backdropScales = chromaticChannelScales(backdropPx, chroma, resolvedEngine);
 

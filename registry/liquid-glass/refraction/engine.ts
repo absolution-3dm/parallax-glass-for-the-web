@@ -230,11 +230,20 @@ export function chromaticChannelScales(
  * grow with its width, so equal-height pills appear to have different glass
  * thicknesses. The short edge keeps the local bevel response invariant across
  * aspect ratios while preserving the existing square/circle scale exactly.
+ * `refrPow` is divided out while encoding R/G so the bitmap uses its full
+ * 8-bit range; multiply it back here to keep the final pixel displacement
+ * unchanged. Keeping it required prevents callers from updating only one side
+ * of that invariant.
  * Fold safety comes from the normalized bevel-slope map, not from capping here.
  */
-export function refractionBackdropScale(strength: number, width: number, height: number) {
+export function refractionBackdropScale(
+  strength: number,
+  width: number,
+  height: number,
+  refrPow: number,
+) {
   const shortEdge = Math.min(Math.max(0, width), Math.max(0, height));
-  return Math.max(0, strength) * shortEdge;
+  return Math.max(0, strength) * shortEdge * Math.max(0, refrPow);
 }
 
 /**
