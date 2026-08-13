@@ -13,11 +13,12 @@ import { LiquidGlass } from "../../registry/liquid-glass/liquid-glass";
 /** Hero stack — near-black fill so stacked panes don't wash out milky. */
 const heroStackMaterial = {
   preset: "navigation" as const,
-  scale: 0.7,
+  scale: 1,
   splay: 1,
   blur: 2,
   tint: 0.15,
   depth: 30,
+  specular: 3,
   fill: "#000000",
 };
 
@@ -25,6 +26,8 @@ const heroStackMaterial = {
 const heroStackEngine = {
   backdropSaturateSvg: 1.1,
   backdropSaturateCssBlur: 1.08,
+  // Give the oversized hero panes a broader, more legible specular rim.
+  edgeWidth: 5,
 };
 
 /** Staggered hero capsule stack — front-left to back-right. */

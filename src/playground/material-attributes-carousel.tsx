@@ -38,7 +38,7 @@ const materialAttributeCards: ReadonlyArray<MaterialAttributeCardConfig> = [
   {
     title: "Pointer Highlight",
     background: `${CAROUSEL_BG}/03-edge.png`,
-    material: { preset: "control", scale: 1.55, depth: 32, blur: 3, tint: 0.32, fill: "#080808" },
+    material: { preset: "control", scale: 2.05, depth: 32, blur: 3, tint: 0.32, fill: "#080808" },
     borderRadius: 64,
     pointerHighlight: {
       radius: 112,

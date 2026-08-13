@@ -1,5 +1,6 @@
 {
-  "rewrites": [{ "source": "/customize", "destination": "/index.html" }],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "images": {
     "sizes": [480, 640, 960, 1280],
     "formats": ["image/avif", "image/webp"],

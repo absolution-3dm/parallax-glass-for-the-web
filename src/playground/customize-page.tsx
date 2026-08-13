@@ -13,12 +13,9 @@ export function CustomizePage() {
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    const previous = document.title;
-    document.title = "Customize · Parallax Glass";
     const root = document.documentElement;
     root.classList.add("customize-page-active");
     return () => {
-      document.title = previous;
       root.classList.remove("customize-page-active");
     };
   }, []);
@@ -30,7 +27,7 @@ export function CustomizePage() {
       <div className="site-chrome-tint" aria-hidden />
 
       <motion.div
-        initial={reduced ? false : { opacity: 0, y: -8 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={
           reduced

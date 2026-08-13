@@ -280,6 +280,14 @@ export function CustomizeShowcase() {
 
   return (
     <div className="customizer-layout">
+      <header className="customizer-seo-copy">
+        <p>Interactive React tool</p>
+        <h1>Liquid Glass Customizer</h1>
+        <span>
+          Tune refraction, blur, tint, chroma, lighting, and radius, then copy
+          the generated JSX.
+        </span>
+      </header>
       <CustomizerDraggableGlass
         borderRadius={borderRadius}
         material={material}

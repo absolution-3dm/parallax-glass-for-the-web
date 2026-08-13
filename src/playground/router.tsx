@@ -26,8 +26,18 @@ function normalizePath(pathname: string) {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
-export function Router({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState(() => normalizePath(window.location.pathname));
+export function Router({
+  children,
+  initialPath,
+}: {
+  children: ReactNode;
+  initialPath?: string;
+}) {
+  const [path, setPath] = useState(() =>
+    normalizePath(
+      initialPath ?? (typeof window === "undefined" ? "/" : window.location.pathname),
+    ),
+  );
 
   useEffect(() => {
     const onPopState = () => {

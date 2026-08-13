@@ -30,6 +30,7 @@ import {
 import { MorphMenu } from "../../registry/liquid-glass/compositions/morph-menu";
 import { preloadVercelImage } from "../lib/vercel-image";
 import { CodeBlock } from "./code-block";
+import { SITE_ORIGIN } from "../seo";
 import { ShowcaseCarouselCard } from "./showcase-carousel";
 
 const CAROUSEL_BG = "/images/Carousel Background";
@@ -529,7 +530,7 @@ export function ComponentsShowcase() {
 }
 
 export function InstallationShowcase() {
-  const [origin, setOrigin] = useState("http://localhost:5173");
+  const [origin, setOrigin] = useState(SITE_ORIGIN);
   const [packageManager, setPackageManager] = useState<"pnpm" | "npm">("pnpm");
   const [selectedPackage, setSelectedPackage] =
     useState<RegistryPackageName>("liquid-glass");

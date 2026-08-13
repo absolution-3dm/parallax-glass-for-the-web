@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir .ssr-dist && node scripts/prerender.mjs && node scripts/verify-seo.mjs",
+    "seo:check": "node scripts/verify-seo.mjs",
     "test": "vitest run",
     "typecheck": "tsc -b --pretty false",
     "registry:build": "shadcn build"

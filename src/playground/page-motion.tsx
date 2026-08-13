@@ -51,7 +51,7 @@ export function PageShell({ children, className }: PageShellProps) {
   return (
     <motion.div
       className={["page-shell", className].filter(Boolean).join(" ")}
-      initial={reduced ? false : { opacity: 0 }}
+      initial={false}
       animate={{ opacity: 1 }}
       exit={reduced ? undefined : { opacity: 0 }}
       transition={
@@ -78,7 +78,7 @@ export function Appear({ children, className, ...props }: AppearProps) {
     <motion.div
       className={className}
       variants={appearContainerVariants}
-      initial={reduced ? false : "hidden"}
+      initial={false}
       animate="show"
       {...props}
     >

@@ -15,6 +15,7 @@ import { Appear, AppearItem, PageShell } from "./playground/page-motion";
 import { Link } from "./playground/router";
 import { SiteMobileNav } from "./playground/site-mobile-nav";
 import { vercelImageSrcSet, vercelImageUrl } from "./lib/vercel-image";
+import { HomeSeoContent, SiteFooter } from "./seo-pages";
 
 const HERO_SCENE = "/images/Carousel Background/02-chroma.png";
 
@@ -117,10 +118,10 @@ export function Playground() {
           </div>
           <div className="hero-inner">
             <Appear className="hero-copy">
-              <AppearItem as="h1">Parallax Glass for the web.</AppearItem>
+              <AppearItem as="h1">Liquid Glass for the Web</AppearItem>
               <AppearItem as="p" className="hero-lede">
-                Native-feeling glass surfaces — crafted, customizable, source
-                you own.
+                An open-source React primitive with live backdrop refraction,
+                customizable materials, shadcn installation, and browser fallbacks.
               </AppearItem>
               <AppearItem className="hero-cta-group">
                 <a
@@ -166,11 +167,8 @@ export function Playground() {
         <MaterialAttributesCarousel />
         <ComponentsShowcase />
         <InstallationShowcase />
-
-        <footer>
-          <span>Parallax Glass</span>
-          <span>shadcn Registry</span>
-        </footer>
+        <HomeSeoContent />
+        <SiteFooter />
       </main>
     </PageShell>
   );
